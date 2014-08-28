@@ -2,7 +2,7 @@ import os
 import getpass
 import logging
 
-import oursql
+import pymysql
 from .collections import Pages, Revisions, Archives, \
     AllRevisions, Users
 
@@ -15,7 +15,7 @@ class DB:
     Represents a connection to a MySQL database.
 
     :Parameters:
-        connection = :class:`oursql.Connection`
+        connection = :class:`pymysql.Connection`
             A connection to a MediaWiki database
     """
 
@@ -107,7 +107,7 @@ class DB:
             args : :class:`argparse.Namespace`
                 A collection of argument values returned by :class:`argparse.ArgumentParser`'s :meth:`parse_args()`
         """
-        connection = oursql.connect(
+        connection = pymysql.connect(
             args.host,
             args.user,
             db=args.database,
@@ -119,12 +119,12 @@ class DB:
     def from_params(cls, *args, **kwargs):
         """
         Constructs a :class:`~mw.database.DB`.  Passes `*args` and `**kwargs`
-        to :meth:`oursql.connect` and configures the connection.
+        to :meth:`pymysql.connect` and configures the connection.
 
         :Parameters:
             args : :class:`argparse.Namespace`
                 A collection of argument values returned by :class:`argparse.ArgumentParser`'s :meth:`parse_args()`
         """
-        kwargs['default_cursor'] = oursql.DictCursor
-        connection = oursql.connect(*args, **kwargs)
+        kwargs['default_cursor'] = pymysql.DictCursor
+        connection = pymysql.connect(*args, **kwargs)
         return cls(connection)
