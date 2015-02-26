@@ -255,3 +255,15 @@ def test_from_page_xml():
     eq_(revision.comment, "Comment 2")
     eq_(revision.model, "wikitext")
     eq_(revision.format, "text/x-wiki")
+
+def test_sha1_generate():
+    f = io.StringIO(SAMPLE_XML)
+    f = io.StringIO("".join([l for l in f if not l.startswith('      <sha1')]))
+
+    dump = Iterator.from_file(f)
+    page = next(dump)
+    revision = next(page)
+
+    eq_(revision.sha1, "ef2f21de058dd8dc37811ad4efcb27c14fa0bfc2")
+    revision = next(page)
+    eq_(revision.sha1, "4d5c0a395cf23c571c07393eb28d464d778da860")
