@@ -4,14 +4,14 @@ from .comment import Comment
 from .contributor import Contributor
 from .text import Text
 from .util import consume_tags
-
+from hashlib import sha1
 
 class Revision(serializable.Type):
     """
     Revision meta data.
     """
     __slots__ = ('id', 'timestamp', 'contributor', 'minor', 'comment', 'text',
-                 'bytes', 'sha1', 'parent_id', 'model', 'format',
+                 'bytes', 'parent_id', 'model', 'format',
                  'beginningofpage')
 
     TAG_MAP = {
@@ -66,7 +66,7 @@ class Revision(serializable.Type):
         Number of bytes of content : `str`
         """
 
-        self.sha1 = none_or(sha1, str)
+        self._sha1 = none_or(sha1, str)
         """
         sha1 hash of the content : `str`
         """
@@ -114,3 +114,16 @@ class Revision(serializable.Type):
                     # For Wikihadoop.
                     # Probably never used by anything, ever.
         )
+
+    @property
+    def sha1(self):
+        if not self._sha1:
+            if not self.text.deleted:
+                self._sha1 = sha1(bytes(self.text, "utf8")).hexdigest()
+
+        return self._sha1
+
+    @sha1.setter
+    def sha1(self, sha1):
+        self._sha1 = sha1
+
