@@ -49,7 +49,7 @@ class ElementIterator:
         self.pointer = pointer
         self.element = element
         self.depth = pointer.depth() - 1
-
+        self.element.attrib = {trim_ns(k): v for k, v in self.element.attrib.items()}
         self.done = False
 
     def __iter__(self):
@@ -93,7 +93,6 @@ class ElementIterator:
 
     @classmethod
     def from_file(cls, f):
-        
         try:
             pointer = EventPointer.from_file(f)
             event, element = next(pointer)
