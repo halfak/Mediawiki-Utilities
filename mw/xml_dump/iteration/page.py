@@ -4,7 +4,6 @@ from ..errors import MalformedXML
 from .redirect import Redirect
 from .revision import Revision
 
-
 class Page(serializable.Type):
     """
     Page meta data and a :class:`~mw.xml_dump.Revision` iterator.  Instances of
@@ -98,6 +97,8 @@ class Page(serializable.Type):
             elif tag == "restrictions":
                 restrictions.append(sub_element.text)
             elif tag == "DiscussionThreading":
+                continue
+            elif tag == "sha1":
                 continue
             elif tag == "revision":
                 first_revision = sub_element

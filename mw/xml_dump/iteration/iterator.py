@@ -43,8 +43,6 @@ class ConcatinatingTextReader(io.TextIOBase):
                 yield item.read()
 
 
-
-
 def concat(*stream_items):
     return ConcatinatingTextReader(*stream_items)
 
@@ -73,7 +71,7 @@ class Iterator(serializable.Type):
                  '__pages')
 
     def __init__(self, site_name=None, dbname=None, base=None, generator=None,
-                 case=None, namespaces=None, pages=None):
+                 case=None, namespaces=None, pages=None, lang=None):
 
         self.site_name = none_or(site_name, str)
         """
@@ -109,6 +107,11 @@ class Iterator(serializable.Type):
         # Should be a lazy generator of page info
         self.__pages = pages
 
+        self.lang = none_or(lang, str)
+        """
+        A 2 character language code.
+        """
+
     def __iter__(self):
         return self.__pages
 
@@ -140,6 +143,9 @@ class Iterator(serializable.Type):
         namespaces = {}
 
         for sub_element in element:
+
+            if sub_element.tag == 'siteinfo':
+                return cls.load_site_info(sub_element)
             if sub_element.tag == 'sitename':
                 site_name = sub_element.text
             if sub_element.tag == 'dbname':
@@ -152,15 +158,13 @@ class Iterator(serializable.Type):
                 case = sub_element.text
             elif sub_element.tag == 'namespaces':
                 namespaces = cls.load_namespaces(sub_element)
-
+        
         return site_name, dbname, base, generator, case, namespaces
 
     @classmethod
     def load_pages(cls, element):
-
         for sub_element in element:
             tag = sub_element.tag
-
             if tag == "page":
                 yield Page.from_element(sub_element)
             else:
@@ -168,14 +172,14 @@ class Iterator(serializable.Type):
                                     "Instead saw '{0}'".format(tag))
 
     @classmethod
-    def from_element(cls, element):
-
+    def from_element(cls, element, lang=None):
         site_name = None
         base = None
         generator = None
         case = None
         namespaces = None
 
+        lang = element.attr("lang")
         # Consume <siteinfo>
         for sub_element in element:
             tag = sub_element.tag
@@ -187,7 +191,7 @@ class Iterator(serializable.Type):
         # Consume all <page>
         pages = cls.load_pages(element)
 
-        return cls(site_name, dbname, base, generator, case, namespaces, pages)
+        return cls(site_name, dbname, base, generator, case, namespaces, pages, lang)
 
     @classmethod
     def from_file(cls, f):
