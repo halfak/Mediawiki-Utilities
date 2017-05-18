@@ -43,8 +43,6 @@ class ConcatinatingTextReader(io.TextIOBase):
                 yield item.read()
 
 
-
-
 def concat(*stream_items):
     return ConcatinatingTextReader(*stream_items)
 
@@ -147,7 +145,7 @@ class Iterator(serializable.Type):
         for sub_element in element:
 
             if sub_element.tag == 'siteinfo':
-                return(cls.load_site_info(sub_element))
+                return cls.load_site_info(sub_element)
             if sub_element.tag == 'sitename':
                 site_name = sub_element.text
             if sub_element.tag == 'dbname':
