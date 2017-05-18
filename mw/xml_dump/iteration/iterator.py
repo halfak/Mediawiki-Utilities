@@ -179,6 +179,7 @@ class Iterator(serializable.Type):
         case = None
         namespaces = None
 
+        lang = element.attr("lang")
         # Consume <siteinfo>
         for sub_element in element:
             tag = sub_element.tag
@@ -196,16 +197,14 @@ class Iterator(serializable.Type):
     def from_file(cls, f):
         element = ElementIterator.from_file(f)
         assert element.tag == "mediawiki"
-        lang = element.attr("lang")
-        return cls.from_element(element, lang=lang)
+        return cls.from_element(element)
 
     @classmethod
     def from_string(cls, string):
         f = io.StringIO(string)
         element = ElementIterator.from_file(f)
         assert element.tag == "mediawiki"
-        lang = element.attr("xml:lang")
-        return cls.from_element(element, lang=lang)
+        return cls.from_element(element)
 
     @classmethod
     def from_page_xml(cls, page_xml):
