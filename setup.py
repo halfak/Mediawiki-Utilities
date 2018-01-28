@@ -15,7 +15,8 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         "requests>=2.4",
-        "pymysql>=0.6.2"],
+        "pymysql>=0.6.2",
+        "multiprocess>=0.70.5"],
     test_suite='nose.collector',
     classifiers=[
         "Programming Language :: Python",
