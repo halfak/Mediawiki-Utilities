@@ -1,5 +1,5 @@
 import io
-from multiprocessing import Queue
+from multiprocess import Queue
 
 from nose.tools import eq_, raises
 

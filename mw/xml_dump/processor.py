@@ -1,7 +1,7 @@
 import logging
 import traceback
 from collections import namedtuple
-from multiprocessing import Process
+from multiprocess import Process
 from queue import Empty
 
 from .functions import open_file

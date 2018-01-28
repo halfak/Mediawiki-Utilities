@@ -1,5 +1,5 @@
 import logging
-from multiprocessing import Queue, Value, cpu_count
+from multiprocess import Queue, Value, cpu_count
 from queue import Empty
 
 from .functions import file
