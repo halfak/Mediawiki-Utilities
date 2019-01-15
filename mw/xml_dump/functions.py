@@ -8,7 +8,7 @@ EXTENSIONS = {
     'xml': ["cat"],
     'gz': ["zcat"],
     'bz2': ["bzcat"],
-    '7z': ["7z", "e", "-so"],
+    '7z': ["7za", "e", "-so"],
     'lzma': ["lzcat"]
 }
 """
